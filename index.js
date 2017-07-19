@@ -149,37 +149,11 @@ app.delete('/movies/:id', (req, res) => {
 // ========= Comments
 //route for posting comments
 app.post('/movies/:id/comments', (req, res) => {
-  var id = req.params.id
-  Post.findById(req.params.id, (err, post) => {
-    if (err) return err;
-
-    console.log();
-    console.log("++++++++++++++++++++++");
-    // var newComment = {text:text}
-    var newCom = new Comment(req.body)
-    newCom._movieid = post._id
-    console.log(newCom);
-    console.log("++++++++++++++++++++++");
-    newCom.save((err, put) => {
-      if (err) {
-        console.log(err)
-      } else {
-        post.comments.push(newCom)
-        post.save()
-        res.redirect('/movies/'+id)
-      }
-    })
-  })
-})
-
-<<<<<<< HEAD
-=======
-app.post('/movies/:id/comments', (req, res) => {
    var id = req.params.id
    Post.findById(req.params.id, (err, post) => {
      if (err) return err;
 
-     console.log();
+     console.log(post);
      console.log("++++++++++++++++++++++");
      // var newComment = {text:text}
      var newCom = new Comment(req.body)
@@ -197,8 +171,7 @@ app.post('/movies/:id/comments', (req, res) => {
    });
   });
  });
-// AUTH ROUTES=================
->>>>>>> 453ec22dec488f8da45f586c06d80254279209f2
+
 // render SIGN UP form
 app.get('/signup', function(req, res){
   res.render('signup');
@@ -244,7 +217,6 @@ function isLoggedIn(req,res,next){
   }
   res.redirect('/login')
 }
-
 
 app.listen(PORT, function(err){
   console.log(err || `Server is listening on port ${PORT}`)
