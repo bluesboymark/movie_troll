@@ -1,23 +1,5 @@
-<% include ./partials/header %>
-<div class="container">
-  <div class="row">
-    <h1 style="text-align:center"> Post a new Movie</h1>
-    <form action="/movies" method="post">
-      <div class="form-group">
-        <input class="form-control" type="text" name="title" placeholder="Movie title">
-      </div>
-      <div class="form-group">
-        <input class="form-control" type="text" name="year" placeholder="Movie year">
-      </div>
-      <div class="form-group">
-        <input class="form-control" type="text" name="image" placeholder="Movie image">
-      </div>
-      <div class="form-group">
-        <input class="form-control" type="text" name="plot" placeholder="Movie plot">
-      </div>
-      <button class="btn btn-default">Submit</button>
-    </form>
-  </div>
-</div>
+<% include ../partials/header %>
 
-<% ./include partials/footer %>
+<% include search %>
+
+<% include ../partials/footer %>

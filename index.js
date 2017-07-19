@@ -12,8 +12,7 @@ const
   request = require('request'),
   User = require('./models/user'),
   Post = require('./models/post'),
-  Comment = require('./models/comment')
-const
+  Comment = require('./models/comments'),
   PORT = 3000,
   app = express()
 
@@ -81,18 +80,19 @@ app.get('/movies', (req, res) => {
 });
 
 app.post('/movies', isLoggedIn, (req, res) =>{
-  var title = req.body.title
-  var year = req.body.year
-  var image = req.body.image
-  var plot = req.body.plot
-  var newPost = {title:title, year:year, image: image, plot: plot}
-  Post.create(newPost, function(err, newPosting){
-    if(err){
-      console.log(err)
-    } else {
-      res.redirect('/movies')
-    }
-  });
+  // var title = req.body.title
+  // var year = req.body.year
+  // var image = req.body.image
+  // var plot = req.body.plot
+  // var newPost = {title:title, year:year, image: image, plot: plot}
+  // Post.create(newPost, function(err, newPosting){
+  //   if(err){
+  //     console.log(err)
+  //   } else {
+  //     res.redirect('/movies')
+  //   }
+  // });
+  res.render('movies/search')
 });
 
 app.get('/movies/new', isLoggedIn, (req, res) => {
@@ -146,18 +146,7 @@ app.delete('/movies/:id', (req, res) => {
 
 
 
-
-// Comments
-app.get('/movies/:id/comments/new', function(req, res){
-  Post.findById(req.params.id, function(err, post){
-    if(err){
-      console.log(err)
-      } else {
-        res.render('comments/new', {post: post});
-      }
-  });
-});
-
+// ========= Comments
 //route for posting comments
 app.post('/movies/:id/comments', (req, res) => {
   var id = req.params.id
@@ -183,6 +172,33 @@ app.post('/movies/:id/comments', (req, res) => {
   })
 })
 
+<<<<<<< HEAD
+=======
+app.post('/movies/:id/comments', (req, res) => {
+   var id = req.params.id
+   Post.findById(req.params.id, (err, post) => {
+     if (err) return err;
+
+     console.log();
+     console.log("++++++++++++++++++++++");
+     // var newComment = {text:text}
+     var newCom = new Comment(req.body)
+     newCom._movieid = post._id
+     console.log(newCom);
+     console.log("++++++++++++++++++++++");
+     newCom.save((err, put) => {
+       if (err) {
+         console.log(err)
+       } else {
+         post.comments.push(newCom)
+         post.save()
+        res.redirect('/movies/'+id)
+      }
+   });
+  });
+ });
+// AUTH ROUTES=================
+>>>>>>> 453ec22dec488f8da45f586c06d80254279209f2
 // render SIGN UP form
 app.get('/signup', function(req, res){
   res.render('signup');
@@ -210,7 +226,7 @@ app.get("/login", function(req, res){
 
 // Create a SESSION
 app.post('/login', passport.authenticate("local", {
-  successRedirect: "/secret",
+  successRedirect: "/movies",
   failureRedirect: "/login"
 }), function(req, res){
 });
@@ -220,7 +236,6 @@ app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/')
 })
-
 
 // middleware to check status
 function isLoggedIn(req,res,next){

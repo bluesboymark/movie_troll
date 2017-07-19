@@ -4,10 +4,6 @@
   <h5><%= post.year %></h5>
   <img src="<%= post.image %>">
   <p><%= post.plot %></p>
-    <% post.comments.forEach(function(c) { %>
-      <h6><%= c.commentor %> </h6> : <%= c.text %>
-
-    <% }) %>
     <a href="/movies/<%= post._id %>/edit">
       <button class="btn btn-primary">Edit Post</button>
     </a>
@@ -15,5 +11,6 @@
     <form class="delete-movie-form" action="/movies/<%= post._id %>?_method=DELETE" method="POST">
     <button class="btn btn-danger">Delete Post</button>
   </form>
+  <% include ../comments/new %>
 </div>
 <% include ../partials/footer %>

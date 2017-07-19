@@ -13,23 +13,18 @@
   opacity: .6;*/
   color: rgb(255,120,120);
   font-family: 'Amatic SC', cursive;
-  font-size: 50px;
+
 }
 
-.username {
+.username{
   height: 26px;
 }
-.password {
+.password{
   height: 26px;
 }
-#caption {
+#caption{
   float: right;
 }
-#poster {
+#poster{
   background-color: grey;
-}
-
-#movie-result {
-  text-align: center;
-  width: 600px;
 }
