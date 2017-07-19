@@ -1,0 +1,15 @@
+<% include ../partials/header %>
+<div class="container">
+  <div class="row">
+    <h1 style="text-align:center"> Add a Comment To <%= post.title %></h1>
+    <form action="/movies/<%= post._id %>/comments" method="post">
+      <div class="form-group">
+        <input class="form-control" type="text" name="comment" placeholder="Add Comment">
+      </div>
+
+      <button class="btn btn-default">Submit</button>
+    </form>
+  </div>
+</div>
+
+<% include ../partials/footer %>

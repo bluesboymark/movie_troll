@@ -1,0 +1,21 @@
+
+<% include ../partials/header %>
+<div class="container" style="width:600px;">
+  <h2> Edit <%= post.title %> </h2>
+  <form action="/movies/<%= post._id %>/edit?_method=PUT" method="post">
+    <div class="form-group">
+      <input class="form-control col-md-4" name="title" value="<%= post.title %>">
+    </div>
+    <div class="form-group">
+      <input class="form-control col-md-4" name="year" value="<%= post.year %>">
+    </div>
+    <div class="form-group">
+      <input class="form-control col-md-4" name="image" value="<%= post.image %>">
+    </div>
+    <div class="form-group">
+      <input class="form-control col-md-4" name="plot" value="<%= post.plot %>">
+    </div>
+    <button class="btn btn-success">Update</button>
+  </form>
+</div>
+<%  include ../partials/footer%>

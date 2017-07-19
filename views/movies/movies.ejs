@@ -1,18 +1,18 @@
-<% include partials/header %>
-<div id="home-banner" class="container">
-  <div class="jumbotron">
+<% include ../partials/header %>
+<div style="background-color:#555" id="home-banner" class="container">
+  <div style="background-color:#00f3ff; width:100%" class="jumbotron">
     <div class="container">
       <h1>This is the home page - ALL POSTS </h1>
       <p>Feel free to bag on anyone</p><span class="glyphicon glyphicon-thumbs-down"></span>
       <p><a class=" btn btn-default btn-large" href="/movies/new"> Share A Movie</a></p>
     </div>
   </div>
-<!-- <% include search %> -->
+
   <div class="row" style="display:flex; flex-wrap: wrap;">
     <% posts.forEach(function(movie){ %>
     <div class="col-md-3 col-sm-6">
       <div class="caption">
-      <h3><%= movie.title %><h3>
+      <h3><%= movie.title %></h3>
         <div class="thumbnail">
           <img src="<%= movie.image %>">
           <p><a href="/movies/<%= movie._id %>" class="btn btn-success">Get tha Deeetz</a></p>
@@ -24,4 +24,4 @@
 </div>
 
 
-<% include partials/footer %>
+<% include ../partials/footer %>

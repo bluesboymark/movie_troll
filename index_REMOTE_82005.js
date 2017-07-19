@@ -9,10 +9,12 @@ const
   passport = require('passport'),
   LocalStrategy = require('passport-local'),
   passportLocalMongoose = require('passport-local-mongoose'),
+  fs = require('fs'),
+  multer = require('multer'),
   request = require('request'),
   User = require('./models/user'),
   Post = require('./models/post'),
-  Comment = require('./models/comment')
+  Comment = require('./models/comments')
 const
   PORT = 3000,
   app = express()
@@ -51,6 +53,8 @@ app.use(function (req, res, next) {
  });
 // console.log(process.env.MDB_API_KEY)
 
+ // API Search===============
+
 app.get('/search/:searchTerm', (req, res) => {
   var searchTerm = req.params.searchTerm;
   var initUrl = 'https://api.themoviedb.org/3/search/movie'
@@ -63,10 +67,10 @@ app.get('/search/:searchTerm', (req, res) => {
   });
 });
 
-//  ROUTES
+//  ROUTES=========================
   // greeting page
 app.get('/',function(req,res){
-    res.render('movies/home');
+    res.render('home');
 });
 
 //  route to home - all posts.
@@ -75,7 +79,7 @@ app.get('/movies', (req, res) => {
     if(err){
       console.log(err)
     } else {
-      res.render('movies/movies', {posts: allPosts})
+      res.render('movies', {posts: allPosts})
     }
   });
 });
@@ -96,16 +100,16 @@ app.post('/movies', isLoggedIn, (req, res) =>{
 });
 
 app.get('/movies/new', isLoggedIn, (req, res) => {
-  res.render('movies/new')
+  res.render('new')
 });
 
 app.get('/movies/:id', (req, res) => {
-  Post.findById(req.params.id).populate("comments").exec(function(err, foundPost){
+  Post.findById(req.params.id, (err, foundPost) => {
     if(err) {
       console.log(err)
     } else {
-      // console.log(foundPost)
-      res.render('movies/show', {post: foundPost});
+      console.log(foundPost)
+      res.render('show', {post: foundPost});
     }
   });
 });
@@ -115,74 +119,23 @@ app.get('/movies/:id/edit', (req,res) => {
     if(err){
       console.log(err)
     } else {
-      res.render('movies/edit', {post: foundPost});
+      res.render('edit', {post: foundPost});
     }
   });
 });
 
-app.put('/movies/:id', function(req, res) {
-  Post.findByIdAndUpdate(req.params.id, req.body.post, function(err, updatedPost){
-    if(err){
-      console.log(err)
-      res.redirect('/movies')
-    } else {
-      res.redirect('/movies/' + req.params.id)
-    }
-  });
-  res.send('edit post')
-});
-
-app.delete('/movies/:id', (req, res) => {
-  Post.findByIdAndRemove(req.params.id, function(err){
-    if(err){
-      console.log(err)
-      res.redirect('/movies')
-    } else {
-      res.redirect('/movies')
-    }
-  });
+app.put('/movies/:id', (req, res) => {
+  res.send('update route')
 });
 
 
 
-
-
-// Comments
-app.get('/movies/:id/comments/new', function(req, res){
-  Post.findById(req.params.id, function(err, post){
-    if(err){
-      console.log(err)
-      } else {
-        res.render('comments/new', {post: post});
-      }
-  });
+// use to prove auth works.
+app.get('/secret', isLoggedIn, function(req, res){
+  console.log(req.user)
+  res.render('secret')
 });
-
-//route for posting comments
-app.post('/movies/:id/comments', (req, res) => {
-  var id = req.params.id
-  Post.findById(req.params.id, (err, post) => {
-    if (err) return err;
-
-    console.log();
-    console.log("++++++++++++++++++++++");
-    // var newComment = {text:text}
-    var newCom = new Comment(req.body)
-    newCom._movieid = post._id
-    console.log(newCom);
-    console.log("++++++++++++++++++++++");
-    newCom.save((err, put) => {
-      if (err) {
-        console.log(err)
-      } else {
-        post.comments.push(newCom)
-        post.save()
-        res.redirect('/movies/'+id)
-      }
-    })
-  })
-})
-
+// AUTH ROUTES=================
 // render SIGN UP form
 app.get('/signup', function(req, res){
   res.render('signup');
@@ -198,7 +151,7 @@ app.post('/signup', function(req, res){
       return res.render('signup');
     }
     passport.authenticate("local")(req,res,function(){
-      res.redirect('/movies');
+      res.redirect('/secret');
     });
   });
 });
@@ -229,7 +182,31 @@ function isLoggedIn(req,res,next){
   }
   res.redirect('/login')
 }
+//comments
+//route for posting comments
+app.post('/movies/:id/comments', (req, res) => {
+  var id = req.params.id
+  Post.findById(req.params.id, (err, post) => {
+    if (err) return err;
 
+    console.log();
+    console.log("++++++++++++++++++++++");
+    // var newComment = {text:text}
+    var newCom = new Comment(req.body)
+    newCom._movieid = post._id
+    console.log(newCom);
+    console.log("++++++++++++++++++++++");
+    newCom.save((err, put) => {
+      if (err) {
+        console.log(err)
+      } else {
+        post.comments.push(newCom)
+        post.save()
+        res.redirect('/movies/'+id)
+      }
+    })
+  })
+})
 
 app.listen(PORT, function(err){
   console.log(err || `Server is listening on port ${PORT}`)

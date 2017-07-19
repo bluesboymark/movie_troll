@@ -1,0 +1,19 @@
+<% include ../partials/header %>
+<div style="text-align:center" class="container">
+  <h1><%= post.title %></h1>
+  <h5><%= post.year %></h5>
+  <img src="<%= post.image %>">
+  <p><%= post.plot %></p>
+    <% post.comments.forEach(function(c) { %>
+      <h6><%= c.commentor %> </h6> : <%= c.text %>
+
+    <% }) %>
+    <a href="/movies/<%= post._id %>/edit">
+      <button class="btn btn-primary">Edit Post</button>
+    </a>
+    <!-- form need for deletee? -->
+    <form class="delete-movie-form" action="/movies/<%= post._id %>?_method=DELETE" method="POST">
+    <button class="btn btn-danger">Delete Post</button>
+  </form>
+</div>
+<% include ../partials/footer %>
