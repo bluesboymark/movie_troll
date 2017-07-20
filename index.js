@@ -8,6 +8,8 @@ const
   methodOverride = require('method-override'),
   passport = require('passport'),
   LocalStrategy = require('passport-local'),
+  FacebookStrategy = require('passport-facebook').Strategy,
+  configAuth = require('./config/auth.js')
   passportLocalMongoose = require('passport-local-mongoose'),
   request = require('request'),
   User = require('./models/user'),
@@ -39,6 +41,14 @@ app.use(require("express-session")({
 //  Auth middleware
 app.use(passport.initialize());
 app.use(passport.session());
+//facebook
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
@@ -51,6 +61,32 @@ app.use(function (req, res, next) {
  });
 // console.log(process.env.MDB_API_KEY)
 
+
+//implement facebook Strategy
+passport.use(new FacebookStrategy({
+	clientID: configAuth.facebookAuth.clientID,
+	clientSecret: configAuth.facebookAuth.clientSecret,
+	callbackURL: configAuth.facebookAuth.callbackURL,
+	profileFields: configAuth.facebookAuth.profileFields
+}, function(token,refreshToken,profile,done){
+	User.findOne({'facebook.id': profile.id}, function(err, user){
+		if(err) return done(err)
+		if(user){
+			return done(null, user)
+		} else {
+			var newUser = new User()
+			newUser.facebook.id = profile.id
+			newUser.facebook.token = token
+			newUser.facebook.name = profile.displayName
+			newUser.facebook.email = profile.emails[0].value
+
+			newUser.save(function(err){
+				if(err) throw err
+				return done(null,newUser)
+			})
+		}
+	})
+}))
  // API Search===============
 
 app.get('/search/:searchTerm', (req, res) => {
@@ -96,12 +132,12 @@ app.post('/movies',isLoggedIn, (req, res) =>{
     }
   })
 });
-
-app.get('/movies/new',isLoggedIn, (req, res) => {
+// redirect to login page if not logged in
+app.get('/movies/new', isLoggedIn, (req, res) => {
   res.render('movies/new')
 });
 
-app.get('/movies/:id', (req, res) => {
+app.get('/movies/:id', isLoggedIn, (req, res) => {
   Post.findById(req.params.id).populate("comments").exec(function(err, foundPost){
     if(err) {
       console.log(err)
@@ -188,6 +224,14 @@ app.post('/signup', function(req, res){
     });
   });
 });
+
+//facebook
+app.get('/auth/facebook', passport.authenticate('facebook', {scope: ['email']}))
+
+app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+	successRedirect: '/',
+	failureRedirect: '/'
+}))
 
 // LOG IN ROUTE
 app.get("/login", function(req, res){
