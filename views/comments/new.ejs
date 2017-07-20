@@ -12,7 +12,7 @@
  <div id="commentary">
    <% for (var i = 0; i < post.comments.length; i++){  %>
 
-       <p> <%= post.comments[i].text %>
+       <p> <strong><%= currentUser.username %>:</strong> <%= post.comments[i].text %>
           <button class="btn btn-warning btn-xs">Edit</button>
           <button class="btn btn-danger btn-xs">Delete</button>
         </p>

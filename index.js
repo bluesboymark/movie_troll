@@ -82,19 +82,22 @@ app.get('/movies', (req, res) => {
   });
 });
 
-app.post('/movies', (req, res) =>{
-  console.log('req.body is:',req.body)
-  Post.create(req.body, (err, newPost) => {
+app.post('/movies',isLoggedIn, (req, res) =>{
+  console.log("User:", req.user)
+  // console.log('req.body is:',req.body)
+  newPost = new Post(req.body);
+  newPost.create = req.user;
+  console.log('newPost:', newPost);
+  newPost.save((err,post) => {
     if(err) {
-      return console.log('err', err)
+       console.log('err', err)
     } else {
-      res.render('movies/movies')
+      res.redirect('/movies')
     }
-
   })
 });
 
-app.get('/movies/new', (req, res) => {
+app.get('/movies/new',isLoggedIn, (req, res) => {
   res.render('movies/new')
 });
 
@@ -109,13 +112,13 @@ app.get('/movies/:id', (req, res) => {
   });
 });
 
-app.get('/movies/:id/edit', (req,res) => {
+app.get('/movies/:id/edit',isLoggedIn, (req,res) => {
   Post.findById(req.params.id, function(err, foundPost){
     res.render('movies/edit', {post: foundPost})
   });
 });
 
-app.put('/movies/:id', function(req, res) {
+app.put('/movies/:id',isLoggedIn, function(req, res) {
   Post.findByIdAndUpdate(req.params.id, req.body.post, function(err, updatedPost){
     if(err){
       console.log(err)
@@ -210,6 +213,27 @@ function isLoggedIn(req,res,next){
     return next();
   }
   res.redirect('/login')
+}
+
+function ownsPost(req,res,next){
+  if(req.isAuthenticated()){
+    Post.findById(req.params.id, function(err, foundPost){
+      if(err){
+        res.redirect('back')
+      } else {
+        console.log(foundPost)
+        if(foundPost.creator.id.equals(req.user._id)){
+          console.log(req.user)
+          conole.log('post creator:', foundPost.creator._id)
+          next()
+        } else {
+          res.redirect('back')
+        }
+      }
+    });
+  } else {
+    res.redirect('back')
+  }
 }
 
 
