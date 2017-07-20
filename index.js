@@ -13,11 +13,11 @@ const
   User = require('./models/user'),
   Post = require('./models/post'),
   Comment = require('./models/comments'),
-  PORT = 3000,
+  PORT = process.env.PORT || 3000,
   app = express()
 
 // connect to mongo
-mongoose.connect('mongodb://localhost/movie_troll')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/movie_troll')
 // express middleware
 app.use(morgan('dev'))
 // pull static files from public directory
