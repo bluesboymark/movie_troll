@@ -35,7 +35,7 @@ searchButton.on('click', function(){
 });
 
 saveButton.on('click',function(e){
-  e.preventDefault();
+  // e.preventDefault();
   // console.log(poster)
   // console.log('<img src="https://image.tmdb.org/t/p/w500'+ dataPoster +'" />');
   picture = "https://image.tmdb.org/t/p/w500"+ dataPoster;
