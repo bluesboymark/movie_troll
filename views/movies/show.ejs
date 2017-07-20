@@ -4,7 +4,13 @@
   <h5><%= post.year %></h5>
   <img src="<%= post.image %>">
   <p><%= post.plot %></p>
-    
+  <a href="/movies/<%= post._id %>/edit"><button class="btn btn-warning"> Edit Post</button></a>
+  <form action="/movies/<%= post._id %>?_method=DELETE" method="POST">
+    <button class="btn btn-danger"> Delete Post</button>
+  </form>
+
+  <a href="/movies"><button class="btn btn-primary"> Go Back</button></a>
+
   <% include ../comments/new %>
 </div>
 <% include ../partials/footer %>
