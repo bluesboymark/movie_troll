@@ -13,6 +13,8 @@
    <% for (var i = 0; i < post.comments.length; i++){  %>
 
        <p> <strong><%= currentUser.facebook.name %>:</strong> <%= post.comments[i].text %>
+          <button class="btn btn-warning btn-xs">Edit</button>
+          <button class="btn btn-danger btn-xs">Delete</button>
         </p>
      <% } %>
    </div>
