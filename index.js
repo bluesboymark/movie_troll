@@ -13,7 +13,7 @@ const
   User = require('./models/user'),
   Post = require('./models/post'),
   Comment = require('./models/comments'),
-  PORT = 3000,
+  // PORT = 3000,
   app = express()
 
 // connect to mongo
@@ -239,6 +239,6 @@ function ownsPost(req,res,next){
 }
 
 
-app.listen(PORT, function(err){
+app.listen(process.env.PORT || 3000, function(err){
   console.log(err || `Server is listening on port ${PORT}`)
 })
