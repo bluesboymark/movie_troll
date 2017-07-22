@@ -14,18 +14,11 @@ const
   Post = require('./models/post'),
   Comment = require('./models/comments'),
   PORT = 3000,
-  uristring = process.env.MONGOLAB_WHITE_URI  || 'mongodb>//localhost/mongolab-curved-55954'
   app = express()
 
 // connect to mongo
-mongoose.connect('mongodb://localhost/movie_troll')
-// mongoose.connect(uristring, function(err, res){
-  // if(err){
-  //   console.log(err)
-  // } else {
-  //   console.log("connected to:" + uristring)
-  // }
-// })
+// mongoose.connect('mongodb://localhost/movie_troll')
+mongoose.connect('mongodb://luna:imadog@ds117093.mlab.com:17093/movie_troll')
 
 // express middleware
 app.use(morgan('dev'))
