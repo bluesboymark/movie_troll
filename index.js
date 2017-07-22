@@ -13,12 +13,12 @@ const
   User = require('./models/user'),
   Post = require('./models/post'),
   Comment = require('./models/comments'),
-  // PORT = 3000,
+  PORT = 8080
   app = express()
 
 // connect to mongo
 // mongoose.connect('mongodb://localhost/movie_troll')
-mongoose.connect('mongodb://luna:imadog@ds117093.mlab.com:17093/movie_troll')
+mongoose.connect(process.env.DATABASEURL)
 
 // express middleware
 app.use(morgan('dev'))
