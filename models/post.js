@@ -5,14 +5,8 @@ const postSchema = new mongoose.Schema({
     year: Number,
     image: String,
     plot: String,
-    creator: {
-      _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-      },
-      username: String
-    },
-      comments: [
+    creator: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
+    comments: [
         {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Comment"

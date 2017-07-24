@@ -1,0 +1,17 @@
+<section id="comments">
+
+  <form action="/movies/<%= post.id %>/comments" method="post">
+  <h3>Leave a Comment</h3>
+  <textarea id="discussion" class="form-control" rows="3" name="text"></textarea>
+  <button id="save-button" class="btn btn-success" value="post">Save Post</button>
+  </form>
+</section>
+
+
+<div id="commentary">
+  <% for (var i = 0; i < post.comments.length; i++){  %>
+
+      <p> <%= post.comments[i].text %> </p>
+
+    <% } %>
+  </div>

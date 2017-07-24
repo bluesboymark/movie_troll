@@ -1,3 +1,4 @@
+
 <h2>Comments</h2>
 <div id="commentary">
  <% for (var i = 0; i < post.comments.length; i++){  %>
@@ -6,6 +7,9 @@
 
    <% } %>
  </div>
+=======
+
+
  <section id="comments">
 
    <form action="/movies/<%= post.id %>/comments" method="post">
@@ -14,3 +18,14 @@
    <button id="save-button" class="btn btn-success" value="post">Save Post</button>
    </form>
  </section>
+
+
+ <div id="commentary">
+   <% for (var i = 0; i < post.comments.length; i++){  %>
+
+       <p> <strong><%= currentUser.username %>:</strong> <%= post.comments[i].text %>
+          <button class="btn btn-warning btn-xs">Edit</button>
+          <button class="btn btn-danger btn-xs">Delete</button>
+        </p>
+     <% } %>
+   </div>
