@@ -53,8 +53,6 @@ app.use(function (req, res, next) {
  });
 // console.log(process.env.MDB_API_KEY)
 
- // API Search===============
-
 app.get('/search/:searchTerm', (req, res) => {
   var searchTerm = req.params.searchTerm;
   var initUrl = 'https://api.themoviedb.org/3/search/movie'
@@ -67,7 +65,7 @@ app.get('/search/:searchTerm', (req, res) => {
   });
 });
 
-//  ROUTES=========================
+//  ROUTES
   // greeting page
 app.get('/',function(req,res){
     res.render('movies/home');
@@ -130,7 +128,6 @@ app.put('/movies/:id',isLoggedIn, function(req, res) {
     }
   });
 
-});
 
 app.delete('/movies/:id', (req, res) => {
   Post.findByIdAndRemove(req.params.id, function(err){
@@ -143,10 +140,35 @@ app.delete('/movies/:id', (req, res) => {
   });
 });
 
-// ========= Comments
 
+// ========= Comments
 //route for posting comments
 app.post('/movies/:id/comments', (req, res) => {
+
+   var id = req.params.id
+   Post.findById(req.params.id, (err, post) => {
+     if (err) return err;
+
+     console.log(post);
+     console.log("++++++++++++++++++++++");
+     // var newComment = {text:text}
+     var newCom = new Comment(req.body)
+     newCom._movieid = post._id
+     console.log(newCom);
+     console.log("++++++++++++++++++++++");
+     newCom.save((err, put) => {
+       if (err) {
+         console.log(err)
+       } else {
+         post.comments.push(newCom)
+         post.save()
+        res.redirect('/movies/'+id)
+      }
+   });
+  });
+ });
+
+
   var id = req.params.id
   Post.findById(req.params.id, (err, post) => {
     if (err) return err;
@@ -171,6 +193,7 @@ app.post('/movies/:id/comments', (req, res) => {
 });
 
 // AUTH ROUTES=================
+
 // render SIGN UP form
 app.get('/signup', function(req, res){
   res.render('signup');
@@ -217,6 +240,7 @@ function isLoggedIn(req,res,next){
   res.redirect('/login')
 }
 
+
 function ownsPost(req,res,next){
   if(req.isAuthenticated()){
     Post.findById(req.params.id, function(err, foundPost){
@@ -239,6 +263,11 @@ function ownsPost(req,res,next){
 }
 
 
+<<<<<<< HEAD
 app.listen(process.env.PORT || 3000, function(err){
+=======
+
+app.listen(PORT, function(err){
+>>>>>>> b499559c2a72c1113f5db668da87bc09f13e41c9
   console.log(err || `Server is listening on port ${PORT}`)
 })
