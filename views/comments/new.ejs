@@ -1,4 +1,15 @@
 
+<h2>Comments</h2>
+<div id="commentary">
+ <% for (var i = 0; i < post.comments.length; i++){  %>
+   
+     <li> <%= post.comments[i].text %> </li>
+
+   <% } %>
+ </div>
+=======
+
+
  <section id="comments">
 
    <form action="/movies/<%= post.id %>/comments" method="post">

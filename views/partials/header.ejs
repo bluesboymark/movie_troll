@@ -19,7 +19,7 @@
             <% if(!currentUser){ %>
                 <li><a href="/login">Log In</a></li>
                 <li><a href="/signup">Sign Up</a></li>
-            <% } else if (currentUser.username) { %>
+
                   <li><a href="#">User: <%= currentUser.username %></a></li>
                   <li><a href="/logout">Logout</a></li>
             <% } else if (currentUser.facebook.name) { %>
